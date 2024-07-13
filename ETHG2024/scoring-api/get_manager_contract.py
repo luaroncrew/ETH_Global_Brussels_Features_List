@@ -16,9 +16,9 @@ CONTRACT_ABI = '''
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "uint256",
-				"name": "listId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "companyId",
+				"type": "string"
 			},
 			{
 				"indexed": false,
@@ -41,9 +41,9 @@ CONTRACT_ABI = '''
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "uint256",
-				"name": "listId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "companyId",
+				"type": "string"
 			}
 		],
 		"name": "PoolDistributed",
@@ -65,9 +65,9 @@ CONTRACT_ABI = '''
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "listId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "companyId",
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
@@ -88,9 +88,9 @@ CONTRACT_ABI = '''
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "listId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "companyId",
+				"type": "string"
 			},
 			{
 				"components": [
@@ -173,9 +173,9 @@ CONTRACT_ABI = '''
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "string",
 				"name": "",
-				"type": "uint256"
+				"type": "string"
 			}
 		],
 		"name": "pools",
@@ -231,8 +231,10 @@ CONTRACT_ABI = '''
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+]      
 '''
+
 
 def get_contract():
     return w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
+

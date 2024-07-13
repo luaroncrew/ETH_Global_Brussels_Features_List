@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-INFURA_URL = 'https://sepolia.infura.io/v3/8bb0bccdaf914db69b3599a3e513e7cb'
+INFURA_URL = os.environ.get('INFURA_URL')  # FOR MORPH ITS QUIQCKNODE RPC URL
 web3 = Web3(Web3.HTTPProvider(INFURA_URL))
 private_key = os.environ.get('PRIVATE_KEY')
 
@@ -46,7 +46,7 @@ def send_pool_distribution_transaction(winners, company_id):
         company_id,
         winners
     ).build_transaction({
-        'chainId': 11155111,  # Sepolia testnet chain ID
+        'chainId': 2810,  # MORPH holesky
         'gas': 300000,  # Adjust the gas limit as needed
         'gasPrice': web3.to_wei('50', 'gwei'),
         'nonce': web3.eth.get_transaction_count(account.address),

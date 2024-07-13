@@ -62,7 +62,6 @@ def calculate_score(payload: Payload):
        aggregate upvote scores and AI-based comment score
        filter negative scores
        return the final scores
-
        """
 
     upvote_scores = payload.get_upvote_scores()

@@ -2,7 +2,7 @@ import os
 import json
 
 from openai import OpenAI
-from models import Payload, ListItem, FeatureSuggestion, Comment
+from models import Payload
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -104,46 +104,3 @@ def get_comment_scores_from_ai(payload: Payload):
     response = list(json.loads(response))
     print(response)
     return response
-
-
-if __name__ == '__main__':
-    # Example payload
-    test_payload = Payload(
-        companyId=1,
-        lists=[
-            ListItem(
-                listId=123,
-                listTitle="Q3 features",
-                featureSuggestions=[
-                    FeatureSuggestion(
-                        title="integrate payments",
-                        creator="justin.eth",
-                        upVotes=12,
-                        comments=[
-                            Comment(text="You may use gnosis chain it's a good thing", creator="kirill.eth"),
-                            Comment(text="dont think it's a good idea", creator="greg.eth")
-                        ]
-                    ),
-                    FeatureSuggestion(
-                        title="integrate blockchain",
-                        creator="alice.eth",
-                        upVotes=10,
-                        comments=[
-                            Comment(text="free gas", creator="bob.eth"),
-                            Comment(text="i'm groot", creator="claire.eth")
-                        ]
-                    ),
-                    FeatureSuggestion(
-                        title="another feature",
-                        creator="justin.eth",
-                        upVotes=3,
-                        comments=[
-                            Comment(text="using gnosis!", creator="justin.eth")
-                        ]
-                    )
-                ]
-            )
-        ]
-    )
-
-
