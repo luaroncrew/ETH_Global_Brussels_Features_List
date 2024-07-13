@@ -14,3 +14,28 @@ token contract deployed on MORPH
 manager contract deployed on MORPH
 * blockchain connector - set up of JSON-RPC provider,
 function allowing to distribute pool rewards based on the calculated score
+
+prerequisites: 
+python 3.11
+
+to run
+
+create virtual environment
+```bash
+python -m venv venv
+```
+
+activate virtual environment
+```bash
+source venv/bin/activate
+```
+
+install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+run server
+```bash
+fastapi dev main.py
+```
