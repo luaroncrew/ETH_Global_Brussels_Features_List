@@ -1,0 +1,41 @@
+{
+  "companyId": 1,
+  "lists": [
+    {
+      "listId": 123,
+      "listTitle": "Q3 features",
+      "featureSuggestions": [
+        {
+          "title": "integrate payments",
+          "creator": "justin.eth",
+          "upVotes": 100,
+          "comments": [
+            {
+              "text": "using gnosis!",
+              "creator": "kirill.eth"
+            },
+            {
+              "text": "dont think it's a good idea",
+              "creator": "greg.eth"
+            }
+          ]
+        },
+        {
+          "title": "integrate blockchain",
+          "creator": "marius.eth",
+          "upVotes": 100,
+          "comments": [
+            {
+              "text": "free gas",
+              "creator": "enora.eth"
+            },
+            {
+              "text": "i'm groot",
+              "creator": "mathis.eth"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
