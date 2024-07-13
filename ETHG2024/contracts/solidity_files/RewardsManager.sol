@@ -19,11 +19,11 @@ contract RewardsPoolManager {
         uint256 totalScore;
     }
 
-    mapping(uint256 => RewardsPool) public pools;
+    mapping(string => RewardsPool) public pools;
     mapping(address => bool) public subscribers;
 
-    event PoolCreated(uint256 listId, uint256 amount, uint256 distributionDate);
-    event PoolDistributed(uint256 listId);
+    event PoolCreated(string companyId, uint256 amount, uint256 distributionDate);
+    event PoolDistributed(string companyId);
     event Subscription(address subscriber);
 
     modifier onlyOwner() {
@@ -47,25 +47,27 @@ contract RewardsPoolManager {
         require(!subscribers[msg.sender], "Already subscribed");
         usdcToken.transferFrom(msg.sender, address(this), subscriptionFee);
         subscribers[msg.sender] = true;
+
+        emit Subscription(msg.sender);
     }
 
-    function createPool(uint256 listId, uint256 amount, uint256 distributionDate) external subscriberOnly {
-        require(pools[listId].amount == 0, "Pool already exists");
+    function createPool(string calldata companyId, uint256 amount, uint256 distributionDate) external subscriberOnly {
+        require(pools[companyId].amount == 0, "Pool already exists");
 
         // Take USDC from the user
         require(usdcToken.transferFrom(msg.sender, address(this), amount), "USDC transfer failed");
 
-        pools[listId] = RewardsPool({
+        pools[companyId] = RewardsPool({
             amount: amount,
             distributionDate: distributionDate,
             totalScore: 0
         });
 
-        emit PoolCreated(listId, amount, distributionDate);
+        emit PoolCreated(companyId, amount, distributionDate);
     }
 
-    function distributePool(uint256 listId, Winner[] calldata winners) external onlyOwner {
-        RewardsPool storage pool = pools[listId];
+    function distributePool(string calldata companyId, Winner[] calldata winners) external onlyOwner {
+        RewardsPool storage pool = pools[companyId];
         require(pool.amount != 0, "Pool does not exist");
         require(block.timestamp >= pool.distributionDate, "Cannot distribute before the distribution date");
 
@@ -83,9 +85,9 @@ contract RewardsPoolManager {
         }
 
         // Delete the pool after distribution
-        delete pools[listId];
+        delete pools[companyId];
 
-        emit PoolDistributed(listId);
+        emit PoolDistributed(companyId);
     }
 
     function isSubscriber(address user) external view returns (bool) {
