@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from typing import List, Dict
 
+import json
+
 
 class Comment(BaseModel):
     text: str
@@ -35,3 +37,7 @@ class Payload(BaseModel):
                 })
 
         return upvote_scores
+
+    def to_json(self) -> str:
+        # Convert the Payload instance to a JSON string representation
+        return json.dumps(self.model_dump())

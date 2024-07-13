@@ -4,6 +4,9 @@ import numpy as np
 
 
 def remove_negative_scores(scores):
+    """
+    removes negative scores entries
+    """
     eligible_scores = {}
     for key, score in scores.items():
         if score > 0:
@@ -13,17 +16,18 @@ def remove_negative_scores(scores):
 
 
 def harmonize_scores(scores):
+    """
+    scale logarithmically the scores going from 1 to 20
+    """
+
     # Convert dictionary values to a numpy array
     score_values = np.array(list(scores.values()), dtype=float)
 
-    # Apply the hyperbolic sine transformation
     transformed_scores = np.arcsinh(score_values)
 
-    # Check for NaN values and handle them
     if np.any(np.isnan(transformed_scores)):
         raise ValueError("NaN values detected in transformed_scores")
 
-    # Normalize the transformed scores to a range (optional)
     min_score = transformed_scores.min()
     max_score = transformed_scores.max()
 
@@ -33,10 +37,7 @@ def harmonize_scores(scores):
     else:
         normalized_scores = (transformed_scores - min_score) / (max_score - min_score)
 
-    # Rescale to a desired range, e.g., 1 to 20
     rescaled_scores = normalized_scores * 19 + 1
-
-    # Convert back to a dictionary with the original keys
     harmonized_scores = {key: round(score) for key, score in zip(scores.keys(), rescaled_scores)}
 
     return harmonized_scores
@@ -56,10 +57,12 @@ def calculate_score(payload: Payload):
            {"creator" : "justin.eth", "score": -0.2}
        ]
 
+       get upvote scores
 
+       aggregate upvote scores and AI-based comment score
+       filter negative scores
+       return the final scores
 
-       :param payload:
-       :return:
        """
 
     upvote_scores = payload.get_upvote_scores()
