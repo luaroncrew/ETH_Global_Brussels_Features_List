@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    // NOTE: When using mysql or sqlserver, uncomment th @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    url      = env("DATABASE_URL")
+    // directUrl = env("DIRECT_DATABASE_URL")
+}
+
+enum Status {
+    DRAFT
+    DISCUSSED
+    NEXT_UP
+    IN_PROGRESS
+    DONE
+    ARCHIVED
+}
+
+model FeatureList {
+    id          String    @id @default(uuid())
+    name        String
+    description String
+    company     Company   @relation(fields: [companyId], references: [id])
+    companyId   String
+    features    Feature[]
+}
+
+model Feature {
+    id            String      @id @default(uuid())
+    title         String
+    description   String
+    status        Status
+    startDate     DateTime?
+    endDate       DateTime?
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    upvotes       Int         @default(0)
+    upvoters      User[]
+    comments      Comment[]
+    createdBy     User        @relation(fields: [userId], references: [id], name: "FeatureCreatedBy")
+    featureList   FeatureList @relation(fields: [featureListId], references: [id])
+    featureListId String
+    userId        String
+}
+
+model Company {
+    id                String        @id @default(uuid())
+    name              String?
+    domain            String        @unique
+    admins            User[]
+    createdAt         DateTime      @default(now())
+    updatedAt         DateTime      @updatedAt
+    featureList       FeatureList[]
+    allowedUserEmails String[]
+    isPrivate         Boolean       @default(false)
+    RewardPools       RewardPool[]
+}
+
+model User {
+    id              String    @id @unique
+    name            String?
+    email           String?   @unique
+    company         Company?  @relation(fields: [companyId], references: [id])
+    companyId       String?
+    upvotedFeatures Feature[]
+    comments        Comment[]
+    createdFeatures Feature[] @relation(name: "FeatureCreatedBy")
+    isSubscribed    Boolean   @default(false)
+    score           Float     @default(0)
+    walletAddress   String
+}
+
+model Comment {
+    id        String   @id @default(uuid())
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    featureId String
+    feature   Feature  @relation(fields: [featureId], references: [id])
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+}
+
+model RewardPool {
+    id               String   @id @default(uuid())
+    company          Company  @relation(fields: [companyId], references: [id])
+    companyId        String
+    totalAmount      Float
+    distributionDate DateTime
+    txHash           String
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+}
