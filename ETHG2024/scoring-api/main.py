@@ -1,7 +1,6 @@
-import os
 
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi import FastAPI, Depends
+from fastapi.security import HTTPBasic
 
 
 from web3 import Web3
@@ -14,35 +13,14 @@ from blockchain_connector import (
 )
 from ens_address_resolver import resolve_ens_address
 
-users = {
-    "admin": {
-        "password": os.environ.get('USER_PASSWORD'),
-        "token": "",
-        "priviliged": True
-    }
-}
 
 security = HTTPBasic()
 app = FastAPI(dependencies=[Depends(security)])
 web3 = Web3()
 
 
-def verification(creds: HTTPBasicCredentials = Depends(security)):
-    username = creds.username
-    password = creds.password
-    if username in users and password == users[username]["password"]:
-        print("User Validated")
-        return True
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-
-
 @app.post("/distributePool")
-async def parse_payload(payload: Payload, Verifcation = Depends(verification)):
+async def parse_payload(payload: Payload):
     winners = calculate_score(payload)
     winners = transform_scores(winners)
     send_pool_distribution_transaction(winners, payload.companyId)
