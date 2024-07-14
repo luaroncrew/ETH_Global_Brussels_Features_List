@@ -1,6 +1,5 @@
 
-from fastapi import FastAPI, Depends
-from fastapi.security import HTTPBasic
+from fastapi import FastAPI
 
 
 from web3 import Web3
@@ -13,9 +12,7 @@ from blockchain_connector import (
 )
 from ens_address_resolver import resolve_ens_address
 
-
-security = HTTPBasic()
-app = FastAPI(dependencies=[Depends(security)])
+app = FastAPI()
 web3 = Web3()
 
 
