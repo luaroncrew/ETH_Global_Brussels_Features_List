@@ -4,7 +4,7 @@ from fastapi import FastAPI
 
 from web3 import Web3
 
-from models import Payload
+from models import Payload, ENS_payload
 from score_calculator import calculate_score
 from blockchain_connector import (
     transform_scores,
@@ -25,8 +25,8 @@ async def parse_payload(payload: Payload):
 
 
 @app.post("/resolveDomainName")
-async def resolve_domain_name(name: str):
-    ens_address = resolve_ens_address(name)
+async def resolve_domain_name(payload: ENS_payload):
+    ens_address = resolve_ens_address(payload.text)
     return {"address": ens_address}
 
 

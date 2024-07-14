@@ -4,6 +4,10 @@ from typing import List, Dict
 import json
 
 
+class ENS_payload(BaseModel):
+    text: str
+
+
 class Comment(BaseModel):
     text: str
     creator: str
